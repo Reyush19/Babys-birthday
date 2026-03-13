@@ -36,7 +36,7 @@
     @keyframes nameGlow { from{text-shadow:0 0 20px rgba(232,83,122,.5),0 2px 8px rgba(0,0,0,.5)} to{text-shadow:0 0 60px rgba(232,83,122,.9),0 0 80px rgba(197,150,58,.4),0 2px 8px rgba(0,0,0,.5)} }
     .hero-subtitle { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(1.1rem,5vw,1.6rem); color: var(--gold-light); letter-spacing: .08em; margin-top: 12px; opacity: .9; }
     .hero-date { margin-top: 24px; font-size: clamp(.8rem,3.5vw,1rem); letter-spacing: .25em; text-transform: uppercase; color: var(--plum-light); }
-    .scroll-hint { position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 6px; color: rgba(255,255,255,.4); font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; animation: scrollBob 2s ease-in-out infinite; }
+    .scroll-hint { position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 6px; color: rgba(255,255,255,.4); font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; animation: scrollBob 2s ease-in-out infinite; cursor: pointer; }
     .scroll-hint span { font-size: 1.4rem; }
     @keyframes scrollBob { 0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)} }
 
@@ -150,12 +150,11 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: block;
         }
 
         .container {
@@ -720,6 +719,9 @@
   document.addEventListener('click',function(e){if(e.target.closest('button,audio,a'))return;spawnHeart(e.clientX,e.clientY);});
   document.addEventListener('touchstart',function(e){Array.from(e.touches).forEach(function(t){spawnHeart(t.clientX,t.clientY);});},{passive:true});
 })();
+
+const scrollHint=document.querySelector('.scroll-hint');
+if(scrollHint){scrollHint.addEventListener('click',()=>{document.getElementById('letter')?.scrollIntoView({behavior:'smooth'});});}
 
 var audioPlayer=document.getElementById('audioPlayer');
 var albumArt=document.getElementById('albumArt');
