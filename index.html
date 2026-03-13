@@ -133,6 +133,10 @@
     .sparkle { display: inline-block; animation: sparkleAnim 1.5s ease-in-out infinite; }
     @keyframes sparkleAnim { 0%,100%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.2) rotate(8deg)} }
 
+    /* CONFETTI */
+    .confetti-piece { position: fixed; top: -10px; width: 8px; height: 14px; background: #f5d98b; opacity: .9; z-index: 9998; pointer-events: none; animation: confettiFall linear forwards; }
+    @keyframes confettiFall { to { transform: translate3d(var(--confetti-x, 0px), 110vh, 0) rotateZ(540deg); opacity: 0; } }
+
     @media (min-width: 520px) {
       .gallery-grid { grid-template-columns: repeat(3, 1fr); }
       .gallery-item:first-child { grid-column: span 1; aspect-ratio: 1; }
@@ -142,11 +146,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🎉 Happy Birthday Sanu! 🎉</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -170,22 +170,9 @@
             z-index: 10;
         }
 
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(-30px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
 
-        h1 {
-            font-size: 3.5em;
-            background: linear-gradient(135deg, #ff69b4, #ffd700);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-            animation: bounce 1s ease-in-out infinite;
-        }
-
+        h1 { font-size: 3.5em; background: linear-gradient(135deg, #ff69b4, #ffd700); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); animation: bounce 1s ease-in-out infinite; }
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
         .subtitle { font-size: 1.3em; color: #764ba2; margin-bottom: 30px; font-style: italic; }
@@ -432,7 +419,7 @@
     to spend every day trying to give it to you. Here is to you, to us, and to every
     magical moment still ahead of us. I love you more than all the stars in the sky. &#x1F496;&#8221;
   </p>
-  <button class="cta-btn reveal" onclick="launchCelebration()">
+  <button class="cta-btn reveal" onclick="celebrate()">
     <span>&#x1F38A;</span> Celebrate Now! <span>&#x1F38A;</span>
   </button>
 </section>
@@ -491,6 +478,28 @@ function playTrack(el,file,title,artist){
   document.getElementById('trackArtist').textContent=artist;
   audioPlayer.src='https://www.soundhelix.com/examples/mp3/'+file+'.mp3';
   audioPlayer.play().catch(function(err){ console.warn('Audio playback failed:', err); });
+}
+
+function triggerConfetti(){
+  const colors=['#e8537a','#f7a8be','#c9963a','#f5d98b','#7b3fa0','#c39bd3','#67e6dc','#fff0f5'];
+  for(let i=0;i<160;i++){
+    const el=document.createElement('div');
+    el.className='confetti-piece';
+    el.style.background=colors[i%colors.length];
+    el.style.left=(Math.random()*100)+'vw';
+    el.style.setProperty('--confetti-x',(Math.random()*40-20)+'vw');
+    el.style.animationDuration=(1.8+Math.random()*1.4)+'s';
+    el.style.animationDelay=(Math.random()*0.3)+'s';
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),3200);
+  }
+}
+
+function celebrate(){
+  document.getElementById('wish')?.scrollIntoView({behavior:'smooth'});
+  triggerConfetti();
+  launchCelebration();
+  audioPlayer.play().catch(function(err){console.warn('Audio autoplay blocked:',err);});
 }
 
 function launchCelebration(){
